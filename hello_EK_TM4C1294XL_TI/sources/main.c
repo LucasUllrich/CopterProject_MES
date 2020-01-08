@@ -38,15 +38,14 @@
 #include <xdc/std.h>
 #include <xdc/runtime/System.h>
 
-/* BIOS Module Headers */
-#include <ti/sysbios/BIOS.h>
-#include <ti/drivers/UART.h>
-#include <ti/drivers/GPIO.h>
+
 
 /* Example/Board Header files */
-#include "Board.h"
+
 
 #include "inc/main.h"
+#include "inc/com.h"
+#include "inc/control.h"
 
 
 UART_Handle _initUart (void)
@@ -92,23 +91,23 @@ void _initBTModule (UART_Handle uart)
     ComUartSend (uart, "SH,1", strlen ("SH,1"));
 
     // Setup the BT Module to connect to the correct copter
-    uint8_t buffer[15] = "SR", strlen ("SR,1"));
+    uint8_t buffer[15] = "SR,";
     strcat ((char*) buffer, COPTER_MAC);
-    ComUartSend (uart, buffer); // TODO Check content of buffer
+    ComUartSend (uart, buffer, 3 + 12); // TODO Check content of buffer
 
     // Check connection status
     ComUartSend (uart, "GK", strlen ("GK"));
 
     // End Setup
-    ComUartSend (uart, "---");
+    ComUartSend (uart, "---", strlen ("---"));
 }
 
-void _initMailboxes (void)
+void _initMailboxes (Mailbox_Handle *uartMailbox)
 {
     Error_Block eb;
     Error_init(&eb);
 
-    uartMailbox = Mailbox_create(SEND_BUFFER_SIZE, 1, NULL, &eb);
+//    uartMailbox = Mailbox_create(UART_BUFFER_SIZE, 1, NULL, &eb);
     if (Error_check(&eb))
     {
         // Stop system
@@ -124,6 +123,7 @@ void _initMailboxes (void)
 Int main()
 {
     UART_Handle uart;
+    Mailbox_Handle uartMailbox;
 
     /* Call board init functions */
     Board_initGeneral();
@@ -135,7 +135,28 @@ Int main()
     System_printf("hello world\n");
 
 
-    Mailbox_params_init();
+//    Mailbox_params_init();
+    _initMailboxes(&uartMailbox);
+
+
+
+    // Quick and dirty code für Tobias
+    // TODO: clean up
+    Timer_Params timerParams;
+    Timer_Handle myTimer;
+    Error_Block eb;
+    Error_init(&eb);
+    Timer_Params_init(&timerParams);
+//    timerParams.period = 20000;
+//    timerParams.periodType = Timer_PeriodType_MICROSECS;
+//    timerParams.arg = (xdc_UArg) uartMailbox;
+//    myTimer = Timer_create(Timer_ANY, controlPoller, &timerParams, &eb);
+//    if (myTimer == NULL) {
+//        System_abort("Timer create failed");
+//    }
+
+
+
 
     // TODO init of BT module needs an own task which is executed after BIOS_start()
 

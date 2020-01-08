@@ -10,11 +10,11 @@
 
 #include <ti/drivers/UART.h>
 
-#include "inc/main.h"
+#include "main.h"
 
 
 void ComUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_t count);
-UART_Callback ComUartReceive (UART_Handle uart, void *buf, size_t count);
+void ComUartReceive (UART_Handle uart, void *buf, size_t count);
 
 
 #endif /* INC_COM_H_ */
