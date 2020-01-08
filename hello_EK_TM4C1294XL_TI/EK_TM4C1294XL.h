@@ -54,6 +54,9 @@ extern "C" {
 #define EK_TM4C1294XL_LED_OFF (0)
 #define EK_TM4C1294XL_LED_ON  (1)
 
+#define PIN_HIGH (1)
+#define PIN_LOW  (0)
+
 /*!
  *  @def    EK_TM4C1294XL_EMACName
  *  @brief  Enum of EMAC names on the EK_TM4C1294XL dev board
@@ -73,6 +76,16 @@ typedef enum EK_TM4C1294XL_GPIOName {
     EK_TM4C1294XL_USR_SW2,
     EK_TM4C1294XL_D1,
     EK_TM4C1294XL_D2,
+    EK_TM4C1294XL_D3,
+    EK_TM4C1294XL_D4,
+    EK_TM4C1294XL_PA2,
+    EK_TM4C1294XL_PQ0,
+    EK_TM4C1294XL_PD2,
+    EK_TM4C1294XL_PP4,
+    EK_TM4C1294XL_PP5,
+    EK_TM4C1294XL_PD4,
+    EK_TM4C1294XL_PM7,
+
 
     EK_TM4C1294XL_GPIOCOUNT
 } EK_TM4C1294XL_GPIOName;
@@ -125,7 +138,7 @@ typedef enum EK_TM4C1294XL_SPIName {
  *  @brief  Enum of UARTs on the EK_TM4C1294XL dev board
  */
 typedef enum EK_TM4C1294XL_UARTName {
-    EK_TM4C1294XL_UART0 = 0,
+    EK_TM4C1294XL_UART6 = 0,
 
     EK_TM4C1294XL_UARTCOUNT
 } EK_TM4C1294XL_UARTName;

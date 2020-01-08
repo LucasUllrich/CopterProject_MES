@@ -56,9 +56,18 @@ extern "C" {
 #define Board_LED_OFF               EK_TM4C1294XL_LED_OFF
 #define Board_LED0                  EK_TM4C1294XL_D1
 #define Board_LED1                  EK_TM4C1294XL_D2
-#define Board_LED2                  EK_TM4C1294XL_D2
+#define Board_LED2                  EK_TM4C1294XL_D3
+#define Board_LED3                  EK_TM4C1294XL_D4
 #define Board_BUTTON0               EK_TM4C1294XL_USR_SW1
 #define Board_BUTTON1               EK_TM4C1294XL_USR_SW2
+
+#define BT_STATUS1                  EK_TM4C1294XL_PA2
+#define BT_STATUS2                  EK_TM4C1294XL_PQ0
+#define BT_SW_BTN                   EK_TM4C1294XL_PD2
+#define BT_RESET                    EK_TM4C1294XL_PP4
+#define BT_RTS                      EK_TM4C1294XL_PP5
+#define BT_CTS                      EK_TM4C1294XL_PD4
+#define BT_WAKE_UP                  EK_TM4C1294XL_PM7
 
 #define Board_I2C0                  EK_TM4C1294XL_I2C7
 #define Board_I2C1                  EK_TM4C1294XL_I2C8
@@ -80,7 +89,7 @@ extern "C" {
 #define Board_USBHOST               EK_TM4C1294XL_USBHOST
 #define Board_USBDEVICE             EK_TM4C1294XL_USBDEVICE
 
-#define Board_UART0                 EK_TM4C1294XL_UART0
+#define Board_UART6                 EK_TM4C1294XL_UART6
 
 #define Board_WATCHDOG0             EK_TM4C1294XL_WATCHDOG0
 

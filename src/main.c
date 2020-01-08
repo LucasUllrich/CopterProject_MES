@@ -31,7 +31,7 @@
  */
 
 /*
- *  ======== hello.c ========
+ *  ======== main.c ========
  */
 
 /* XDC Module Headers */
@@ -40,17 +40,65 @@
 
 /* BIOS Module Headers */
 #include <ti/sysbios/BIOS.h>
+#include <ti/drivers/UART.h>
+#include <ti/drivers/GPIO.h>
 
 /* Example/Board Header files */
 #include "Board.h"
+
+
+UART_Handle _initUart (void)
+{
+    UART_Params uartParams;
+    UART_Handle uart;
+
+    UART_Params_init(&uartParams);
+    uartParams.readMode = UART_MODE_CALLBACK;
+    uartParams.writeMode = UART_MODE_BLOCKING;
+    uartParams.readCallback = NULL; // TODO
+    uartParams.readDataMode = UART_DATA_BINARY;
+    uartParams.writeDataMode = UART_DATA_BINARY;
+    uartParams.baudRate = 115200;
+    uartParams.readEcho = UART_ECHO_OFF;
+
+    uart = UART_open(Board_UART6, &uartParams);
+    return uart;
+}
+
+
+void _initBTModule (UART_Handle uart)
+{
+    // Activate Bluetooth Module
+    GPIO_write(BT_SW_BTN, PIN_HIGH);
+
+    // Wait for status pins to signal for active BT Module
+    while (!((GPIO_read(BT_STATUS1) == 0) && GPIO_read(BT_STATUS2) == 1));
+
+    // BT Module is ready, start configuration to assure correct behavior
+    ComUartSend (uart, "$$$");
+    //
+    uint8_t buffer[15];
+    buffer[0] = "SR,";
+    buffer[3] = COPTER_MAC;
+    ComUartSend (uart, &buffer);
+}
+
+
+
 
 /*
  *  ======== main ========
  */
 Int main()
 {
+    UART_Handle uart;
+
     /* Call board init functions */
     Board_initGeneral();
+    Board_initUART();
+
+    uart = _initUart();
+    _initBTModule(uart);
 
     System_printf("hello world\n");
 

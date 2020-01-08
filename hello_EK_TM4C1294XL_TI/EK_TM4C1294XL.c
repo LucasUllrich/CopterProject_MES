@@ -297,6 +297,29 @@ GPIO_PinConfig gpioPinConfigs[] = {
     GPIOTiva_PN_1 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
     /* EK_TM4C1294XL_USR_D2 */
     GPIOTiva_PN_0 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
+    /* EK_TM4C1294XL_D3 */
+    GPIOTiva_PF_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
+    /* EK_TM4C1294XL_D4 */
+    GPIOTiva_PF_0 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
+
+    /* BT_STATUS1 */
+    GPIOTiva_PA_2 | GPIO_CFG_INPUT,
+    GPIOTiva_PQ_3 | GPIO_CFG_INPUT,
+
+    /* BT_STATUS2 */
+    GPIOTiva_PQ_0 | GPIO_CFG_INPUT,
+
+    /* BT_SW_BTN */
+    GPIOTiva_PD_2 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_LOW,
+
+    /* BT_RESET */
+    GPIOTiva_PP_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
+
+    /* BT_RTS, Request to send, aktive high -> request by default */
+    GPIOTiva_PP_5 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
+
+    /* BT_CTS */
+    GPIOTiva_PD_4 | GPIO_CFG_INPUT,
 };
 
 /*
@@ -709,8 +732,8 @@ unsigned char uartTivaRingBuffer[EK_TM4C1294XL_UARTCOUNT][32];
 /* UART configuration structure */
 const UARTTiva_HWAttrs uartTivaHWAttrs[EK_TM4C1294XL_UARTCOUNT] = {
     {
-        .baseAddr = UART0_BASE,
-        .intNum = INT_UART0,
+        .baseAddr = UART6_BASE,
+        .intNum = INT_UART6,
         .intPriority = (~0),
         .flowControl = UART_FLOWCONTROL_NONE,
         .ringBufPtr  = uartTivaRingBuffer[0],
@@ -734,10 +757,10 @@ const UART_Config UART_config[] = {
 void EK_TM4C1294XL_initUART(void)
 {
     /* Enable and configure the peripherals used by the uart. */
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART6);
+    GPIOPinConfigure(GPIO_PP0_U6RX);
+    GPIOPinConfigure(GPIO_PP1_U6TX);
+    GPIOPinTypeUART(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
     /* Initialize the UART driver */
 #if TI_DRIVERS_UART_DMA
