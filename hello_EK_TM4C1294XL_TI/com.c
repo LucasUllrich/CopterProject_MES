@@ -30,8 +30,8 @@ void comUartReceive (UART_Handle uart, void *buf, size_t count)
 
 void comSender (xdc_UArg mailboxObject)
 {
-//    Mailbox_Handle mailbox = (Mailbox_Handle) mailboxObject;
-    Copter_Params copterParams = {0};
-//    Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);
+    Mailbox_Handle mailbox = (Mailbox_Handle) mailboxObject;
+    Copter_Params copterParams;
+    Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);
     uint16_t dummy = copterParams.roll;
 }

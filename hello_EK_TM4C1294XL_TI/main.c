@@ -118,6 +118,9 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
     }
 }
 
+//Clock_Struct clk0Struct, clk1Struct;
+//Clock_Handle clk2Handle;
+//Clock_Struct controlStruct;
 
 /*
  *  ======== main ========
@@ -125,12 +128,17 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
 Int main()
 {
 //    UART_Handle uart;
-//    Mailbox_Handle uartMailbox;
+    Mailbox_Handle uartMailbox;
 
-//    Types_FreqHz cpuFreq = {0};
-//    cpuFreq.lo = CPU_FREQ_LO;
-//    cpuFreq.hi = (CPU_FREQ_HI >> 32);
-//    BIOS_setCpuFreq (&cpuFreq);
+    Types_FreqHz cpuFreq = {0};
+    cpuFreq.lo = CPU_FREQ_LO;
+    cpuFreq.hi = (CPU_FREQ_HI >> 32);
+    BIOS_setCpuFreq (&cpuFreq);
+    if (cpuFreq.lo != CPU_FREQ_LO)  // Omit hi value as 120 MHz fits in the lo value
+    {
+        // TODO: Add error led
+        while(1);
+    }
 
     /* Call board init functions */
     Board_initGeneral();
@@ -142,8 +150,8 @@ Int main()
 //    System_printf("hello world\n");
 
 
-//    Mailbox_params_init();
-//    _initMailboxes(&uartMailbox);
+//    Mailbox_Params_init();
+    _initMailboxes(&uartMailbox);
 
 
 
@@ -151,34 +159,29 @@ Int main()
     // TODO: clean up
     Clock_Params controlParams;
     Clock_Handle controlClock;
-    Error_Block eb;
 
+    Error_Block eb;
     Error_init (&eb);
+
     Clock_Params_init (&controlParams);
-    controlParams.arg = (UArg) 20;
-    controlParams.period = 30;
+    controlParams.arg = (UArg) &uartMailbox;
+    controlParams.period = 20;
     controlParams.startFlag = TRUE;        // start with BIOS_start()
-    controlClock = Clock_create (controlPoller, 5, &controlParams, &eb);
+    controlClock = Clock_create (controlPoller, 1, &controlParams, &eb);
     if (controlClock == NULL) {
         System_abort ("Clock create failed");
     }
-    Clock_start(controlClock);
 
-//    Clock_Params comParams;
-//    Clock_Handle comTimer;
-//    Clock_Params_init (&comParams);
-//    comParams.arg = (UArg) &uartMailbox;
-//    comParams.period = US_TO_CLOCKTICKS(20000);
-//    comParams.startFlag = 0;
-//    comTimer = Clock_create ((Clock_FuncPtr) comSender, 0, &comParams, &eb);
-//    if (comTimer == NULL) {
-//        System_abort ("Clock create failed");
-//    }
-
-
-//    Copter_Params copterParams = {0};
-//    copterParams.roll = 10;
-//    Mailbox_post(uartMailbox, &copterParams, BIOS_NO_WAIT);
+    Clock_Params comParams;
+    Clock_Handle comTimer;
+    Clock_Params_init (&comParams);
+    comParams.arg = (UArg) &uartMailbox;
+    comParams.period = 20;
+    comParams.startFlag = TRUE;
+    comTimer = Clock_create (comSender, 1, &comParams, &eb);
+    if (comTimer == NULL) {
+        System_abort ("Clock create failed");
+    }
 
 
     // TODO init of BT module needs an own task which is executed after BIOS_start()

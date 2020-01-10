@@ -10,6 +10,6 @@
 
 #include "main.h"
 
-void controlPoller (xdc_UArg mailboxObject);
+void controlPoller (UArg mailboxObject);
 
 #endif /* INC_CONTROL_H_ */

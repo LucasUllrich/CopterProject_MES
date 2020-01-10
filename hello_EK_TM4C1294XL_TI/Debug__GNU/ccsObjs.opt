@@ -1,0 +1,1 @@
+"./EK_TM4C1294XL.o" "./com.o" "./control.o" "./main.o" -Wl,-T"../EK_TM4C1294XL.cmd" -Wl,-T"../tm4c1294ncpdt.lds" -Wl,-T"configPkg/linker.cmd" -Wl,--start-group -lc -Wl,--end-group 
