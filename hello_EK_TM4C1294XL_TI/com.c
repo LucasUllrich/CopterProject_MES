@@ -5,10 +5,10 @@
  *      Author: lullrich
  */
 
-#include "inc/com.h"
+#include "com.h"
 
 
-void ComUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_t count)
+void comUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_t count)
 {
     uint8_t index;
     for (index = 0; index < count; index ++)
@@ -23,7 +23,15 @@ void ComUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_t co
 //    UART_write (uart, 0x0d, 1); // Send line ending character
 }
 
-void ComUartReceive (UART_Handle uart, void *buf, size_t count)
+void comUartReceive (UART_Handle uart, void *buf, size_t count)
 {
 
+}
+
+void comSender (xdc_UArg mailboxObject)
+{
+//    Mailbox_Handle mailbox = (Mailbox_Handle) mailboxObject;
+    Copter_Params copterParams = {0};
+//    Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);
+    uint16_t dummy = copterParams.roll;
 }

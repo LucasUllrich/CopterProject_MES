@@ -4,6 +4,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM./home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/blinky/target_config.ccxml.Stellaris In-Circuit Debug Interface_0/CORTEX_M4_0" value="${build_artifact:Copter}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT./home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/blinky/target_config.ccxml.Stellaris In-Circuit Debug Interface_0/CORTEX_M4_0" value="Copter"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:Copter}"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM./home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/blinky/target_config.ccxml.Stellaris In-Circuit Debug Interface_0/CORTEX_M4_0" value="/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/Debug/Copter.out"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/Copter"/>
 </listAttribute>

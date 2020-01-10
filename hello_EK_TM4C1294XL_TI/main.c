@@ -37,15 +37,17 @@
 /* XDC Module Headers */
 #include <xdc/std.h>
 #include <xdc/runtime/System.h>
+#include <xdc/runtime/Types.h>
+#include <ti/sysbios/BIOS.h>
 
 
 
 /* Example/Board Header files */
 
 
-#include "inc/main.h"
-#include "inc/com.h"
-#include "inc/control.h"
+#include "main.h"
+#include "com.h"
+#include "control.h"
 
 
 UART_Handle _initUart (void)
@@ -56,7 +58,7 @@ UART_Handle _initUart (void)
     UART_Params_init(&uartParams);
     uartParams.readMode = UART_MODE_CALLBACK;
     uartParams.writeMode = UART_MODE_BLOCKING;
-    uartParams.readCallback = ComUartReceive;
+    uartParams.readCallback = comUartReceive;
     uartParams.readDataMode = UART_DATA_BINARY;
     uartParams.writeDataMode = UART_DATA_BINARY;
     uartParams.baudRate = 115200;
@@ -76,30 +78,30 @@ void _initBTModule (UART_Handle uart)
     while (!((GPIO_read(BT_STATUS1) == 0) && GPIO_read(BT_STATUS2) == 1));
 
     // BT Module is ready, start configuration to assure correct behavior
-    ComUartSend (uart, "$$$", strlen ("$$$"));
+    comUartSend (uart, "$$$", strlen ("$$$"));
 
     // Set security mode so no authentication is required
-    ComUartSend (uart, "SA,2", strlen ("SA,2"));
+    comUartSend (uart, "SA,2", strlen ("SA,2"));
 
     // Set BT Module into pairing mode, it should establish the connection itself
-    ComUartSend (uart, "SM,6", strlen ("SM,6"));
+    comUartSend (uart, "SM,6", strlen ("SM,6"));
 
     // Switch to classic mode only
-    ComUartSend (uart, "SG,2", strlen ("SG,2"));
+    comUartSend (uart, "SG,2", strlen ("SG,2"));
 
     // Set BT Module into high power mode so it does not sleep
-    ComUartSend (uart, "SH,1", strlen ("SH,1"));
+    comUartSend (uart, "SH,1", strlen ("SH,1"));
 
     // Setup the BT Module to connect to the correct copter
     uint8_t buffer[15] = "SR,";
     strcat ((char*) buffer, COPTER_MAC);
-    ComUartSend (uart, buffer, 3 + 12); // TODO Check content of buffer
+    comUartSend (uart, buffer, 3 + 12); // TODO Check content of buffer
 
     // Check connection status
-    ComUartSend (uart, "GK", strlen ("GK"));
+    comUartSend (uart, "GK", strlen ("GK"));
 
     // End Setup
-    ComUartSend (uart, "---", strlen ("---"));
+    comUartSend (uart, "---", strlen ("---"));
 }
 
 void _initMailboxes (Mailbox_Handle *uartMailbox)
@@ -107,7 +109,7 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
     Error_Block eb;
     Error_init(&eb);
 
-//    uartMailbox = Mailbox_create(UART_BUFFER_SIZE, 1, NULL, &eb);
+    *uartMailbox = Mailbox_create(sizeof(Copter_Params), 1, NULL, &eb);
     if (Error_check(&eb))
     {
         // Stop system
@@ -122,40 +124,61 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
  */
 Int main()
 {
-    UART_Handle uart;
-    Mailbox_Handle uartMailbox;
+//    UART_Handle uart;
+//    Mailbox_Handle uartMailbox;
+
+//    Types_FreqHz cpuFreq = {0};
+//    cpuFreq.lo = CPU_FREQ_LO;
+//    cpuFreq.hi = (CPU_FREQ_HI >> 32);
+//    BIOS_setCpuFreq (&cpuFreq);
 
     /* Call board init functions */
     Board_initGeneral();
-    Board_initUART();
+//    Board_initUART();
 
-    uart = _initUart();
-    _initBTModule(uart);
+//    uart = _initUart();
+//    _initBTModule(uart);
 
-    System_printf("hello world\n");
+//    System_printf("hello world\n");
 
 
 //    Mailbox_params_init();
-    _initMailboxes(&uartMailbox);
+//    _initMailboxes(&uartMailbox);
 
 
 
     // Quick and dirty code für Tobias
     // TODO: clean up
-    Timer_Params timerParams;
-    Timer_Handle myTimer;
+    Clock_Params controlParams;
+    Clock_Handle controlClock;
     Error_Block eb;
-    Error_init(&eb);
-    Timer_Params_init(&timerParams);
-//    timerParams.period = 20000;
-//    timerParams.periodType = Timer_PeriodType_MICROSECS;
-//    timerParams.arg = (xdc_UArg) uartMailbox;
-//    myTimer = Timer_create(Timer_ANY, controlPoller, &timerParams, &eb);
-//    if (myTimer == NULL) {
-//        System_abort("Timer create failed");
+
+    Error_init (&eb);
+    Clock_Params_init (&controlParams);
+    controlParams.arg = (UArg) 20;
+    controlParams.period = 30;
+    controlParams.startFlag = TRUE;        // start with BIOS_start()
+    controlClock = Clock_create (controlPoller, 5, &controlParams, &eb);
+    if (controlClock == NULL) {
+        System_abort ("Clock create failed");
+    }
+    Clock_start(controlClock);
+
+//    Clock_Params comParams;
+//    Clock_Handle comTimer;
+//    Clock_Params_init (&comParams);
+//    comParams.arg = (UArg) &uartMailbox;
+//    comParams.period = US_TO_CLOCKTICKS(20000);
+//    comParams.startFlag = 0;
+//    comTimer = Clock_create ((Clock_FuncPtr) comSender, 0, &comParams, &eb);
+//    if (comTimer == NULL) {
+//        System_abort ("Clock create failed");
 //    }
 
 
+//    Copter_Params copterParams = {0};
+//    copterParams.roll = 10;
+//    Mailbox_post(uartMailbox, &copterParams, BIOS_NO_WAIT);
 
 
     // TODO init of BT module needs an own task which is executed after BIOS_start()
