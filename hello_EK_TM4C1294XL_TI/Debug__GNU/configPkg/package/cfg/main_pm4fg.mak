@@ -15,7 +15,7 @@ package/cfg/main_pm4fg.om4fg: package/cfg/main_pm4fg.c package/cfg/main_pm4fg.ma
 	@$(RM) $@.dep
 	$(RM) $@
 	@$(MSG) clm4fg $< ...
-	$(gnu.targets.arm.M4F.rootDir)/bin/arm-none-eabi-gcc -c -MD -MF $@.dep -x c  -Wunused -Wunknown-pragmas -ffunction-sections -fdata-sections  -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mabi=aapcs -g -Dfar= -D__DYNAMIC_REENT__   -Dxdc_cfg__xheader__='"configPkg/package/cfg/main_pm4fg.h"'  -Dxdc_target_name__=M4F -Dxdc_target_types__=gnu/targets/arm/std.h -Dxdc_bld__profile_release -Dxdc_bld__vers_1_0_7_2_1  -O2  -I/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm//libs/install-native/arm-none-eabi/include   $(XDCINCS)  -o $@ $<
+	$(gnu.targets.arm.M4F.rootDir)/bin/arm-none-eabi-gcc -c -MD -MF $@.dep -x c  -Wunused -Wunknown-pragmas -ffunction-sections -fdata-sections  -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mabi=aapcs -g -Dfar= -D__DYNAMIC_REENT__   -Dxdc_cfg__xheader__='"configPkg/package/cfg/main_pm4fg.h"'  -Dxdc_target_name__=M4F -Dxdc_target_types__=gnu/targets/arm/std.h -Dxdc_bld__profile_release -Dxdc_bld__vers_1_0_7_2_1  -O2  -I/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm//libs/install-native/arm-none-eabi/include   $(XDCINCS)  -o $@ $<
 	-@$(FIXDEP) $@.dep $@.dep
 	
 package/cfg/main_pm4fg.om4fg: export LD_LIBRARY_PATH=

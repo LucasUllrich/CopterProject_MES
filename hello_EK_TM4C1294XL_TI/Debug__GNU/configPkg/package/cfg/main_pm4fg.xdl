@@ -6,17 +6,17 @@ __STACK_SIZE = 0x300;
 __TI_STACK_SIZE = __STACK_SIZE;
 
 INPUT(
-    /home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/Debug__GNU/configPkg/package/cfg/main_pm4fg.om4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/mw/wifi/cc3x00/lib/cc3x00_host_driver.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/lib/drivers_tivaware.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/lib/drivers_wifi_tivaware.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/mw/fatfs/lib/release/ti.mw.fatfs.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/ports/lib/tirtosport.am4fg
-    /home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/src/sysbios/sysbios.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/catalog/arm/cortexm4/tiva/ce/lib/Boot.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/gnu.targets.arm.rtsv7M.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/boot.am4fg
-    /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/syscalls.am4fg
+    /mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI/Debug__GNU/configPkg/package/cfg/main_pm4fg.om4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/mw/wifi/cc3x00/lib/cc3x00_host_driver.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/lib/drivers_tivaware.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/lib/drivers_wifi_tivaware.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/mw/fatfs/lib/release/ti.mw.fatfs.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages/ti/drivers/ports/lib/tirtosport.am4fg
+    /mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI/src/sysbios/sysbios.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/catalog/arm/cortexm4/tiva/ce/lib/Boot.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/gnu.targets.arm.rtsv7M.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/boot.am4fg
+    /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/gnu/targets/arm/rtsv7M/lib/syscalls.am4fg
 )
 
 /*

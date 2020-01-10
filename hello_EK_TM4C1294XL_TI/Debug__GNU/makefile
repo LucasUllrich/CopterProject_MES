@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/lullrich/Programme/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major
+CG_TOOL_ROOT := /home/tobias/CCS8/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major
 
 GEN_OPTS__FLAG := @"configPkg/compiler.opt"
 GEN_CMDS__FLAG := -Wl,-T"configPkg/linker.cmd"
@@ -16,6 +16,7 @@ ORDERED_OBJS += \
 -Wl,-T"../tm4c1294ncpdt.lds" \
 $(GEN_CMDS__FLAG) \
 -Wl,--start-group \
+"/home/tobias/ti/tivaware_c_series_2_1_4_178/driverlib/ccs/Debug/driverlib.lib" \
 -lc \
 -Wl,--end-group \
 
@@ -144,14 +145,14 @@ all: $(OBJS) $(CMD_SRCS) $(LDS_SRCS) $(GEN_CMDS)
 Copter.out: $(OBJS) $(CMD_SRCS) $(LDS_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: GNU Linker'
-	"/home/lullrich/Programme/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" -DPART_TM4C1294NCPDT -Og -ffunction-sections -fdata-sections -g -gdwarf-3 -gstrict-dwarf -Wall -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"Copter.map" -o"Copter.out" $(ORDERED_OBJS)
+	"/home/tobias/CCS8/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" -DPART_TM4C1294NCPDT -Og -ffunction-sections -fdata-sections -g -gdwarf-3 -gstrict-dwarf -Wall -march=armv7e-m -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wl,-Map,"Copter.map" -L"/home/tobias/ti/tivaware_c_series_2_1_4_178/driverlib/ccs/Debug" -o"Copter.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 Copter.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: GNU Objcopy Utility'
-	"/home/lullrich/Programme/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "Copter.hex"
+	"/home/tobias/CCS8/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-objcopy"  $(EXE_OUTPUTS__QUOTED) "Copter.hex"
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 

@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: '/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/main.cfg',
+        cfgScript: '/mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI/main.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -41,7 +41,7 @@ else {
 
 var thisObj = {
     cfg:        '../main.cfg',
-    outputPath: '/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/Debug__GNU/configPkg',
+    outputPath: '/mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI/Debug__GNU/configPkg',
     exeName:    'main' + suffix,
     exeIntName: 'main' + suffix.replace('.', '_'),
     targ:       targ,

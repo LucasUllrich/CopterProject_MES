@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lc
+LIBS := /home/tobias/ti/tivaware_c_series_2_1_4_178/driverlib/ccs/Debug/driverlib.lib -lc
 

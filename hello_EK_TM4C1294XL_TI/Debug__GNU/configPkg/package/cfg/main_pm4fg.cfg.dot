@@ -5,7 +5,7 @@ digraph configuration {
     concentrate=true;
     compound=true;
     label="\nConfiguration for configPkg/main.xm4fg"
-  node [font=Helvetica, fontsize=14, fontcolor=black];  subgraph cluster0 {label=""; __cfg [label="/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI/main.cfg", color=white, fontcolor=blue];
+  node [font=Helvetica, fontsize=14, fontcolor=black];  subgraph cluster0 {label=""; __cfg [label="/mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI/main.cfg", color=white, fontcolor=blue];
     node [font=Helvetica, fontsize=10];    subgraph cluster1 {
         label="";
         xdc_services_global__top [shape=box,label="xdc.services.global\n1,0,0,0", color=white];

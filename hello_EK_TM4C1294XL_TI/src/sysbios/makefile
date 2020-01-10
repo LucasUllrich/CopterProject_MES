@@ -1,26 +1,26 @@
 
-XOPTS = -I"/home/lullrich/ti/xdctools_3_32_00_06_core/packages/" -Dxdc_target_types__=/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/targets/arm/elf/std.h -Dxdc_target_name__=M4F
+XOPTS = -I"/home/tobias/CCS8/xdctools_3_32_00_06_core/packages/" -Dxdc_target_types__=/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/targets/arm/elf/std.h -Dxdc_target_name__=M4F
 
-vpath % /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/
-vpath %.c /home/lullrich/ti/xdctools_3_32_00_06_core/packages/
+vpath % /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/
+vpath %.c /home/tobias/CCS8/xdctools_3_32_00_06_core/packages/
 
 CCOPTS    = --endian=little -mv7M4 --abi=eabi --float_support=fpv4spd16 -q -ms --opt_for_speed=2  --program_level_compile -o3 -g --optimize_with_debug  -Dti_sysbios_knl_Task_minimizeLatency__D=FALSE -Dti_sysbios_knl_Clock_stopCheckNext__D=FALSE -Dti_sysbios_family_arm_m3_Hwi_enableException__D=TRUE -Dti_sysbios_family_arm_m3_Hwi_disablePriority__D=32U -Dti_sysbios_family_arm_m3_Hwi_numSparseInterrupts__D=0U
 
-XDC_ROOT  = /home/lullrich/ti/xdctools_3_32_00_06_core/packages/
+XDC_ROOT  = /home/tobias/CCS8/xdctools_3_32_00_06_core/packages/
 
-BIOS_ROOT = /home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/
+BIOS_ROOT = /home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/
 
 BIOS_DEFS =  -Dti_sysbios_BIOS_swiEnabled__D=TRUE -Dti_sysbios_BIOS_taskEnabled__D=TRUE -Dti_sysbios_BIOS_clockEnabled__D=TRUE -Dti_sysbios_BIOS_runtimeCreatesEnabled__D=TRUE -Dti_sysbios_hal_Hwi_DISABLE_ALL_HOOKS -Dti_sysbios_knl_Swi_DISABLE_ALL_HOOKS -Dti_sysbios_BIOS_smpEnabled__D=FALSE -Dti_sysbios_Build_useHwiMacros -Dti_sysbios_knl_Swi_numPriorities__D=16 -Dti_sysbios_knl_Task_deleteTerminatedTasks__D=FALSE -Dti_sysbios_knl_Task_numPriorities__D=16 -Dti_sysbios_knl_Task_checkStackFlag__D=TRUE -Dti_sysbios_knl_Task_initStackFlag__D=TRUE -Dti_sysbios_knl_Task_DISABLE_ALL_HOOKS -Dti_sysbios_knl_Clock_TICK_SOURCE=ti_sysbios_knl_Clock_TickSource_TIMER -Dti_sysbios_knl_Clock_TICK_MODE=ti_sysbios_knl_Clock_TickMode_PERIODIC -Dti_sysbios_hal_Core_delegate_getId=ti_sysbios_hal_CoreNull_getId__E -Dti_sysbios_hal_Core_delegate_interruptCore=ti_sysbios_hal_CoreNull_interruptCore__E -Dti_sysbios_hal_Core_delegate_lock=ti_sysbios_hal_CoreNull_lock__E -Dti_sysbios_hal_Core_delegate_unlock=ti_sysbios_hal_CoreNull_unlock__E -Dti_sysbios_hal_Core_numCores__D=1 -Dti_sysbios_hal_CoreNull_numCores__D=1 -Dti_sysbios_utils_Load_taskEnabled__D=TRUE -Dti_sysbios_utils_Load_swiEnabled__D=FALSE -Dti_sysbios_utils_Load_hwiEnabled__D=FALSE -Dti_sysbios_family_arm_m3_Hwi_dispatcherSwiSupport__D=TRUE -Dti_sysbios_family_arm_m3_Hwi_dispatcherTaskSupport__D=TRUE -Dti_sysbios_family_arm_m3_Hwi_dispatcherAutoNestingSupport__D=TRUE -Dti_sysbios_family_arm_m3_Hwi_dispatcherIrpTrackingSupport__D=TRUE -Dti_sysbios_knl_Semaphore_supportsEvents__D=FALSE -Dti_sysbios_knl_Semaphore_supportsPriority__D=FALSE -Dxdc_runtime_Assert_DISABLE_ALL -Dxdc_runtime_Log_DISABLE_ALL
 
-BIOS_INC  = -I"/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/"
+BIOS_INC  = -I"/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/"
 
-TARGET_INC = -I"/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/"
+TARGET_INC = -I"/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/"
 
-INCS = $(BIOS_INC) $(TARGET_INC)  --include_path="/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI" --include_path="/home/lullrich/Dokumente/Studium/MES/1_Sem/ESW/CopterProject/CopterProject_MES/hello_EK_TM4C1294XL_TI" --include_path="/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/TivaWare_C_Series-2.1.1.71b" --include_path="/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/posix" --include_path="/home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include" 
+INCS = $(BIOS_INC) $(TARGET_INC)  --include_path="/mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI" --include_path="/mnt/e70811e6-a2f3-439a-87af-aa14d26ca3b9/FHTW/Master/ESW/CopterProject_MES/hello_EK_TM4C1294XL_TI" --include_path="/home/tobias/ti/tirtos_tivac_2_16_00_08/products/TivaWare_C_Series-2.1.1.71b" --include_path="/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/posix" --include_path="/home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/include" 
 
-CC = /home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armcl -c $(CCOPTS) -I /home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include
-ASM = /home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armcl -c $(CCOPTS) -I /home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include
-AR = /home/lullrich/Programme/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/bin/armar rq
+CC = /home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/bin/armcl -c $(CCOPTS) -I /home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/include
+ASM = /home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/bin/armcl -c $(CCOPTS) -I /home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/include
+AR = /home/tobias/CCS8/ccsv8/tools/compiler/ti-cgt-arm_18.1.7.LTS/bin/armar rq
 
 DEL = rm -f
 CP = cp -f

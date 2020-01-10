@@ -16,6 +16,6 @@ if (!(target instanceof xdc.module("xdc.bld.ITarget").Module)) {
 }
 
 /* configuro was passed the target's rootDir explicitly */
-target.rootDir = '/home/lullrich/Programme/ti/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major';
+target.rootDir = '/home/tobias/CCS8/ccsv8/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major';
 
 Build.targets = [target];

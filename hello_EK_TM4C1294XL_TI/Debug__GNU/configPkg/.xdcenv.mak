@@ -1,8 +1,8 @@
 #
 _XDCBUILDCOUNT = 
 ifneq (,$(findstring path,$(_USEXDCENV_)))
-override XDCPATH = /home/lullrich/ti/tirtos_tivac_2_16_00_08/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/ndk_2_25_00_09/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/uia_2_00_05_50/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/ns_1_11_00_10/packages
-override XDCROOT = /home/lullrich/ti/xdctools_3_32_00_06_core
+override XDCPATH = /home/tobias/ti/tirtos_tivac_2_16_00_08/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/ndk_2_25_00_09/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/uia_2_00_05_50/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/ns_1_11_00_10/packages
+override XDCROOT = /home/tobias/CCS8/xdctools_3_32_00_06_core
 override XDCBUILDCFG = ./config.bld
 endif
 ifneq (,$(findstring args,$(_USEXDCENV_)))
@@ -11,6 +11,6 @@ override XDCTARGETS =
 endif
 #
 ifeq (0,1)
-PKGPATH = /home/lullrich/ti/tirtos_tivac_2_16_00_08/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/ndk_2_25_00_09/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/uia_2_00_05_50/packages;/home/lullrich/ti/tirtos_tivac_2_16_00_08/products/ns_1_11_00_10/packages;/home/lullrich/ti/xdctools_3_32_00_06_core/packages;..
+PKGPATH = /home/tobias/ti/tirtos_tivac_2_16_00_08/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/tidrivers_tivac_2_16_00_08/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/ndk_2_25_00_09/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/uia_2_00_05_50/packages;/home/tobias/ti/tirtos_tivac_2_16_00_08/products/ns_1_11_00_10/packages;/home/tobias/CCS8/xdctools_3_32_00_06_core/packages;..
 HOSTOS = Linux
 endif
