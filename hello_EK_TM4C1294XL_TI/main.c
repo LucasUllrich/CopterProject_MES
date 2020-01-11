@@ -153,6 +153,8 @@ Int main()
 //    Mailbox_Params_init();
     _initMailboxes(&uartMailbox);
 
+    //initializing hardware components for controller input polling
+    initControlHW();
 
 
     // Quick and dirty code für Tobias

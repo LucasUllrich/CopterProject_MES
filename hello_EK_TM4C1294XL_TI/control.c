@@ -6,6 +6,7 @@
  */
 #include <xdc/std.h>
 #include <xdc/runtime/System.h>
+#include <math.h>
 
 #include "control.h"
 
@@ -19,14 +20,16 @@ void controlPoller (UArg mailboxObject)
     int32_t bordButton1 = 0;
     int32_t bordButton2 = 0;
     int32_t armButton = 0;
-    uint32_t analogInputs[5];
-    uint8_t analogPins[] = {ADC_CTL_CH3, ADC_CTL_CH2, ADC_CTL_CH1, ADC_CTL_CH9, ADC_CTL_CH0};
+    uint32_t analogInputs[5] = {0};
+    uint16_t adcStepWidth = 1;
     uint16_t statusLedCounter = 0;
+    uint8_t analogPins[] = {ADC_CTL_CH3, ADC_CTL_CH2, ADC_CTL_CH1, ADC_CTL_CH9, ADC_CTL_CH0};
     bool statusLedStatus = false;
     uint8_t i = 0;
 
-    initControlHW();
-    memset(analogInputs, 0, sizeof(analogInputs));
+    static int32_t oldButtonValues[5] = {0};
+    static int32_t validButtonValues[5] = {0};
+    static uint32_t validADCValues[5] = {0};
 
     copterParams.roll = 10;
     //Mailbox_post(mailbox, &copterParams, BIOS_NO_WAIT); //does not work so far...
@@ -38,19 +41,28 @@ void controlPoller (UArg mailboxObject)
 
     copterParams.arm = false;
     while(1){
+        //read inputs
         usrButton1 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_1);
         usrButton2 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_2);
-        bordButton1 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_0);
-        bordButton2 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_1);
+        bordButton2 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_0);
+        bordButton1 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_1);
         armButton = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
         for(i = 0; i < sizeof(analogPins); i++){
             analogInputs[i] = getValueFromADC(analogPins[i]);
+            if(i < ACCELERATOR_AXIS){adcStepWidth = ACCELERATOR_STEP_WIDTH;}
+            else{adcStepWidth = JOYSTICK_STEP_WIDTH;}
+            validADCValues[i] = (uint32_t)round(analogInputs[i]/round(ADC_RANGE/adcStepWidth));
+        }
+
+        if(usrButton1 != oldButtonValues[0]){
+
         }
 #if PRINT_CTL_INPUT
         System_printf("Yaw trim: B1 = %d, B2 = %d, Throttle trim: B1 = %d, B2 = %d, Arm = %d\n", usrButton1, usrButton2, bordButton1, bordButton2, armButton);
-        System_printf("Acceleration: X = %d, Y = %d, Z = %d, Joystick: X = %d, Y = %d\n", analogInputs[0], analogInputs[1], analogInputs[2], analogInputs[3], analogInputs[4]);
+        System_printf("Acceleration: X = %d, Y = %d, Z = %d, Joystick: X = %d, Y = %d\n", validADCValues[0], validADCValues[1], validADCValues[2], validADCValues[3], validADCValues[4]);
         System_flush();
 #endif
+        // handle status LED
         statusLedCounter++;
         if(statusLedCounter >= (uint16_t)(STATUS_LED_INTERVAL/20)){
             if(statusLedStatus){
