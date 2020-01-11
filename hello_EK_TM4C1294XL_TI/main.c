@@ -36,7 +36,6 @@
 
 /* XDC Module Headers */
 #include <xdc/std.h>
-#include <xdc/runtime/System.h>
 #include <xdc/runtime/Types.h>
 #include <ti/sysbios/BIOS.h>
 
@@ -49,6 +48,8 @@
 #include "com.h"
 #include "control.h"
 
+
+Copter_Params copterParams;
 
 UART_Handle _initUart (void)
 {
@@ -128,7 +129,10 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
 Int main()
 {
 //    UART_Handle uart;
+
     Mailbox_Handle uartMailbox;
+
+
 
     Types_FreqHz cpuFreq = {0};
     cpuFreq.lo = CPU_FREQ_LO;
@@ -149,42 +153,40 @@ Int main()
 
 //    System_printf("hello world\n");
 
-
-//    Mailbox_Params_init();
     _initMailboxes(&uartMailbox);
-
-    //initializing hardware components for controller input polling
-    initControlHW();
-
-
-    // Quick and dirty code für Tobias
-    // TODO: clean up
-    Clock_Params controlParams;
-    Clock_Handle controlClock;
 
     Error_Block eb;
     Error_init (&eb);
 
-    Clock_Params_init (&controlParams);
-    controlParams.arg = (UArg) &uartMailbox;
-    controlParams.period = 20;
-    controlParams.startFlag = TRUE;        // start with BIOS_start()
-    controlClock = Clock_create (controlPoller, 1, &controlParams, &eb);
-    if (controlClock == NULL) {
-        System_abort ("Clock create failed");
+    Task_Handle controlTask;
+    Task_Params controlParams;
+    Task_Params_init(&controlParams);
+
+    controlParams.arg0 = (UArg) (&uartMailbox);
+    controlParams.arg1 = 0;
+    controlParams.priority = 8;
+    controlParams.stackSize = 4096;
+
+    controlTask = Task_create((Task_FuncPtr)controlPoller, &controlParams, &eb);
+    if (controlTask == NULL)
+    {
+        System_abort ("controlTask creation failed");
     }
 
-    Clock_Params comParams;
-    Clock_Handle comTimer;
-    Clock_Params_init (&comParams);
-    comParams.arg = (UArg) &uartMailbox;
-    comParams.period = 20;
-    comParams.startFlag = TRUE;
-    comTimer = Clock_create (comSender, 1, &comParams, &eb);
-    if (comTimer == NULL) {
-        System_abort ("Clock create failed");
-    }
 
+    Task_Handle comTask;
+    Task_Params comParams;
+    Task_Params_init(&comParams);
+
+    comParams.arg0 = (UArg) (&uartMailbox);
+    comParams.arg1 = 0;
+    comParams.priority = 8;
+
+    comTask = Task_create((Task_FuncPtr)comSender, &comParams, &eb);
+    if (comTask == NULL)
+    {
+        System_abort ("comTask creation failed");
+    }
 
     // TODO init of BT module needs an own task which is executed after BIOS_start()
 
