@@ -27,6 +27,6 @@
 
 void initControlHW();
 uint32_t getValueFromADC(uint8_t adcPort);
-void controlPoller (UArg mailboxObject);
+void controlPoller (UArg *mailboxObject);
 
 #endif /* INC_CONTROL_H_ */
