@@ -165,7 +165,6 @@ Int main()
     controlParams.arg0 = (UArg) (&uartMailbox);
     controlParams.arg1 = 0;
     controlParams.priority = 8;
-//    controlParams.stackSize = 4096;
 
     controlTask = Task_create((Task_FuncPtr)controlPoller, &controlParams, &eb);
     if (controlTask == NULL)

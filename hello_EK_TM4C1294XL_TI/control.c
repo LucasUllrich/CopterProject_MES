@@ -13,7 +13,7 @@
 void controlPoller (UArg *mailboxObject)
 {
     // TODO: Please check for correctness
-    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
+//    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     Copter_Params copterParams;
     int32_t usrButton1 = 0;
     int32_t usrButton2 = 0;

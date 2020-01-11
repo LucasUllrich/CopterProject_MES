@@ -37,6 +37,7 @@ void comSender (UArg *mailboxObject, UArg arg1)
     {
         Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);
         dummy = copterParams.roll;
+//        System_printf("comTask\n");
         System_printf("comTask: %d\n", dummy);
         System_flush();
         Task_sleep (20);
