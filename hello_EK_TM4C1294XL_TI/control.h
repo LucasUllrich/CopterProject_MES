@@ -19,8 +19,10 @@
 #include "driverlib/debug.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/adc.h"
 
 void initControlHW();
+uint32_t getValueFromADC(uint8_t adcPort);
 void controlPoller (UArg mailboxObject);
 
 #endif /* INC_CONTROL_H_ */
