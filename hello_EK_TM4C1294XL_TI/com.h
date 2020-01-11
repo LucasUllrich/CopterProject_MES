@@ -15,7 +15,7 @@
 
 void comUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_t count);
 void comUartReceive (UART_Handle uart, void *buf, size_t count);
-void comSender (xdc_UArg mailboxObject);
+void comSender (UArg *mailboxObject, UArg arg1);
 
 
 #endif /* INC_COM_H_ */
