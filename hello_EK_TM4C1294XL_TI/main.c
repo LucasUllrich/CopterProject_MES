@@ -155,6 +155,8 @@ Int main()
 
     _initMailboxes(&uartMailbox);
 
+    initControlHW();
+
     Error_Block eb;
     Error_init (&eb);
 

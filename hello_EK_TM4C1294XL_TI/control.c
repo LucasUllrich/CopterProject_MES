@@ -21,12 +21,13 @@ void controlPoller (UArg *mailboxObject)
     int32_t bordButton2 = 0;
     int32_t armButton = 0;
     uint32_t analogInputs[5] = {0};
-    uint16_t adcStepWidth = 1;
+    uint32_t adcStepWidth = 1;
     uint16_t statusLedCounter = 0;
     uint8_t analogPins[] = {ADC_CTL_CH3, ADC_CTL_CH2, ADC_CTL_CH1, ADC_CTL_CH9, ADC_CTL_CH0};
     bool statusLedStatus = false;
     uint8_t i = 0;
 
+    // TODO: static ist hier jetzt nicht mehr notwendig, ist ja jetzt ein task
     static int32_t oldButtonValues[5] = {0};
     static int32_t validButtonValues[5] = {0};
     static uint32_t validADCValues[5] = {0};
@@ -42,6 +43,9 @@ void controlPoller (UArg *mailboxObject)
 
     copterParams.arm = false;
     while(1){
+        // TODO: lösch mich wenn du mich nicht mehr brauchst
+        System_printf("ControlTask\n");
+        System_flush();
         //read inputs
         usrButton1 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_1);
         usrButton2 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_2);
@@ -76,6 +80,7 @@ void controlPoller (UArg *mailboxObject)
             }
             statusLedCounter = 0;
         }
+        Task_sleep(20);
     }
 }
 
