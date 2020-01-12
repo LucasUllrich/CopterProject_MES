@@ -12,6 +12,7 @@
 
 void controlPoller (UArg *mailboxObject)
 {
+#ifndef DEACTIVATE_CONTROLLER
     // TODO: Please check for correctness
 //    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     Copter_Params copterParams;
@@ -42,11 +43,15 @@ void controlPoller (UArg *mailboxObject)
 #endif
 
     copterParams.arm = false;
+#endif // DEACTIVATE_CONTROLLER
+
     while(1){
         // TODO: lösch mich wenn du mich nicht mehr brauchst
         System_printf("ControlTask\n");
         System_flush();
+#ifndef DEACTIVATE_CONTROLLER
         //read inputs
+        // TODO: use the RTOS function GPIO_read instead of the tiva function!!
         usrButton1 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_1);
         usrButton2 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_2);
         bordButton2 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_0);
@@ -80,6 +85,7 @@ void controlPoller (UArg *mailboxObject)
             }
             statusLedCounter = 0;
         }
+#endif // DEACTIVATE_CONTROLLER
         Task_sleep(20);
     }
 }

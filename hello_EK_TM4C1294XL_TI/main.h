@@ -31,6 +31,9 @@
 #define CPU_FREQ_HI ((CPU_FREQ & 0xffffffff00000000) >> 32)
 #define US_TO_CLOCKTICKS(time) (((float)time / 1000000) / CPU_FREQ)
 
+// DEBUG DEFINES
+#define DEACTIVATE_CONTROLLER
+
 //extern Mailbox_Handle uartMailbox;
 
 typedef struct Copter_Params {
