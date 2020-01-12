@@ -82,7 +82,7 @@ void comSender (UArg *mailboxObject, UArg *uartObject)
     Copter_Params copterParams;
     uint16_t dummy;
 
-    _initBTModule(uart);
+    //_initBTModule(uart);
 
     while (1)
     {

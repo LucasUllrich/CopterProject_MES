@@ -32,7 +32,7 @@
 #define US_TO_CLOCKTICKS(time) (((float)time / 1000000) / CPU_FREQ)
 
 // DEBUG DEFINES
-#define DEACTIVATE_CONTROLLER
+//#define DEACTIVATE_CONTROLLER
 
 //extern Mailbox_Handle uartMailbox;
 
