@@ -111,8 +111,9 @@ void controlPoller(UArg *mailboxObject)
 {
 #ifndef DEACTIVATE_CONTROLLER
     // TODO: Please check for correctness
-//    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
+    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     Copter_Params copterParams;
+    Copter_Params dumpDummy;
     Trim_Params copterTrim;
     int32_t buttonValues[NUM_OF_BUTTONS] = {0};
     uint32_t analogInputs[NUM_OF_ADC_IN] = {0};
@@ -137,8 +138,6 @@ void controlPoller(UArg *mailboxObject)
     copterTrim.yaw = 1500;
     copterTrim.throttle = 1400;
     copterTrim.trimSteps = 1;
-
-    //Mailbox_post(mailbox, &copterParams, BIOS_NO_WAIT); //does not work so far...
 
 #if PRINT_CTL_INPUT
     System_printf("Starting to poll controller input...\n");
@@ -178,6 +177,9 @@ void controlPoller(UArg *mailboxObject)
         copterParams.throttle = calculateOutputValueForJoystick(copterTrim.throttle, validADCValues[4]);
         copterParams.pitch = calculateOutputValueForAccelerator(validADCValues[1]);
         copterParams.roll = calculateOutputValueForAccelerator(validADCValues[0]);
+
+        //pushing new data to mailbox if free
+        Mailbox_post(mailbox, &copterParams, BIOS_NO_WAIT);
 
 #if PRINT_CTL_INPUT
         System_printf("Yaw trim: B1 = %d, B2 = %d, Throttle trim: B1 = %d, B2 = %d, Arm = %d\n", buttonValues[0], buttonValues[1], buttonValues[2], buttonValues[3], buttonValues[4]);
