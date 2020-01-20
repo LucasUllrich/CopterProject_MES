@@ -65,9 +65,10 @@ extern "C" {
 #define BT_STATUS2                  EK_TM4C1294XL_PQ0
 #define BT_SW_BTN                   EK_TM4C1294XL_PD2
 #define BT_RESET                    EK_TM4C1294XL_PP4
-#define BT_RTS                      EK_TM4C1294XL_PP5
-#define BT_CTS                      EK_TM4C1294XL_PD4
+#define BT_CTS                      EK_TM4C1294XL_PP5
+#define BT_RTS                      EK_TM4C1294XL_PD4
 #define BT_WAKE_UP                  EK_TM4C1294XL_PM7
+#define TESTPIN                     EK_TM4C1294XL_PN4
 
 #define Board_I2C0                  EK_TM4C1294XL_I2C7
 #define Board_I2C1                  EK_TM4C1294XL_I2C8

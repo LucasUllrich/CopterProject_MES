@@ -49,25 +49,7 @@
 #include "control.h"
 
 
-Copter_Params copterParams;
-
-UART_Handle _initUart (void)
-{
-    UART_Params uartParams;
-    UART_Handle uart;
-
-    UART_Params_init(&uartParams);
-    uartParams.readMode = UART_MODE_CALLBACK;
-    uartParams.writeMode = UART_MODE_BLOCKING;
-    uartParams.readCallback = comUartReceive;
-    uartParams.readDataMode = UART_DATA_BINARY;
-    uartParams.writeDataMode = UART_DATA_BINARY;
-    uartParams.baudRate = 115200;
-    uartParams.readEcho = UART_ECHO_OFF;
-
-    uart = UART_open(Board_UART6, &uartParams);
-    return uart;
-}
+//Copter_Params copterParams;
 
 void _initMailboxes (Mailbox_Handle *uartMailbox)
 {
@@ -83,20 +65,15 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
     }
 }
 
-//Clock_Struct clk0Struct, clk1Struct;
-//Clock_Handle clk2Handle;
-//Clock_Struct controlStruct;
 
 /*
  *  ======== main ========
  */
 Int main()
 {
-    UART_Handle uart;
+//    UART_Handle uart;
 
     Mailbox_Handle uartMailbox;
-
-
 
     Types_FreqHz cpuFreq = {0};
     cpuFreq.lo = CPU_FREQ_LO;
@@ -113,7 +90,7 @@ Int main()
     Board_initGPIO();
     Board_initUART();
 
-    uart = _initUart();
+//    uart = _initUart();
 
 //    System_printf("hello world\n");
 
@@ -144,8 +121,9 @@ Int main()
     Task_Params_init(&comParams);
 
     comParams.arg0 = (UArg) (&uartMailbox);
-    comParams.arg1 = (UArg) (&uart);
+//    comParams.arg1 = (UArg) (&uart);
     comParams.priority = 12;
+    comParams.stackSize = 1024;
 
     comTask = Task_create((Task_FuncPtr)comSender, &comParams, &eb);
     if (comTask == NULL)

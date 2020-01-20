@@ -25,6 +25,8 @@
 
 // Defines
 #define COPTER_MAC  ("0006668CB270")
+#define PHONE_MAC   ("902BD2ABC649")
+#define CONNECT_DRONE
 #define UART_BUFFER_SIZE (32)
 #define CPU_FREQ 120000000
 #define CPU_FREQ_LO (CPU_FREQ & 0xffffffff)
@@ -32,7 +34,7 @@
 #define US_TO_CLOCKTICKS(time) (((float)time / 1000000) / CPU_FREQ)
 
 // DEBUG DEFINES
-#define DEACTIVATE_CONTROLLER
+//#define DEACTIVATE_CONTROLLER
 
 //extern Mailbox_Handle uartMailbox;
 

@@ -91,6 +91,7 @@ void controlPoller (UArg *mailboxObject)
 }
 
 void initControlHW(){
+#ifndef DEACTIVATE_CONTROLLER
     // Enable the GPIO ports for status LED
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     // Check if the peripheral access is enabled.
@@ -135,6 +136,7 @@ void initControlHW(){
     GPIOPinTypeADC(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
 
     ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
+#endif
 }
 
 uint32_t getValueFromADC(uint8_t adcPort){

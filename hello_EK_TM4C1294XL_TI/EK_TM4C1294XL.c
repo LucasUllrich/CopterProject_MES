@@ -316,10 +316,16 @@ GPIO_PinConfig gpioPinConfigs[] = {
     GPIOTiva_PP_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
 
     /* BT_RTS, Request to send, aktive high -> request by default */
-    GPIOTiva_PP_5 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
+    GPIOTiva_PD_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
 
     /* BT_CTS */
-    GPIOTiva_PD_4 | GPIO_CFG_INPUT,
+    GPIOTiva_PP_5 | GPIO_CFG_INPUT,
+
+    /* BT_WAKE_UP */
+    GPIOTiva_PM_7 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_HIGH,
+
+    /* TESTPIN */
+    GPIOTiva_PN_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_MED | GPIO_CFG_OUT_LOW,
 };
 
 /*

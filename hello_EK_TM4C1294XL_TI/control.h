@@ -8,8 +8,8 @@
 #ifndef INC_CONTROL_H_
 #define INC_CONTROL_H_
 
-#define PRINT_CTL_INPUT 1
-#define PRINT_CTL_OUTPUT 1
+#define PRINT_CTL_INPUT 0
+#define PRINT_CTL_OUTPUT 0
 #define STATUS_LED_INTERVAL 400 //ms
 #define JOYSTICK_STEP_WIDTH 40  //uint16_t
 #define ACCELERATOR_STEP_WIDTH 200 //uint16_t
