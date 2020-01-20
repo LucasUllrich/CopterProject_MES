@@ -238,6 +238,7 @@ void comSender (UArg *mailboxObject, UArg arg1)
     while(_initBTModule(uart));
     GPIO_write(Board_LED0, PIN_HIGH);
 
+
     while (1)
     {
         Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);

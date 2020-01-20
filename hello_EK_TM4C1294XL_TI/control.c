@@ -10,66 +10,184 @@
 
 #include "control.h"
 
-void controlPoller (UArg *mailboxObject)
+void assignButtonState(Copter_Params* paramStruc, Trim_Params* trimParams, int32_t debouncedButtonVal, uint8_t buttonIdentifier){
+    switch(buttonIdentifier){
+    //yaw trim to right
+    case 0:{
+        if(debouncedButtonVal == 0){
+            if(paramStruc->arm > 0){
+                if((trimParams->yaw + trimParams->trimSteps) <= VALUE_RANGE_MAX){
+                    trimParams->yaw = trimParams->yaw + trimParams->trimSteps;
+                }
+            }
+            else {
+                trimParams->trimSteps = (trimParams->trimSteps == 1)?10:1;
+            }
+        }
+    }break;
+    //yaw trim to left
+    case 1:{
+        if(debouncedButtonVal == 0){
+            if(paramStruc->arm > 0){
+                if((trimParams->yaw + trimParams->trimSteps) >= VALUE_RANGE_MIN){
+                    trimParams->yaw = trimParams->yaw - trimParams->trimSteps;
+                }
+            }
+        }
+    }break;
+    //throttle trim up
+    case 2:{
+        if(debouncedButtonVal == 0){
+            if((trimParams->throttle + trimParams->trimSteps) <= VALUE_RANGE_MAX){
+                trimParams->throttle = trimParams->throttle + trimParams->trimSteps;
+            }
+        }
+    }break;
+    //throttle trim down
+    case 3:{
+        if(debouncedButtonVal == 0){
+            if((trimParams->throttle + trimParams->trimSteps) >= VALUE_RANGE_MIN){
+                trimParams->throttle = trimParams->throttle - trimParams->trimSteps;
+            }
+        }
+    }break;
+    //arm state
+    case 4:{
+        if(debouncedButtonVal == 0){
+            (paramStruc->arm == 0)?(paramStruc->arm = 1):(paramStruc->arm = 0);
+        }
+    }break;
+    default:{}break;
+    }
+}
+
+uint16_t calculateOutputValueForJoystick(uint16_t trimParam, uint32_t readVal){
+    uint16_t retVal = 1500;
+    uint16_t offsetToZero = VALUE_RANGE_MIN;
+
+    if(readVal > round(JOYSTICK_STEP_WIDTH/2 + JOYSTICK_DEAD_STEPS)){
+        if(trimParam > (VALUE_RANGE_MIN + round(VALUE_RANGE_ABS/2))){
+            offsetToZero = VALUE_RANGE_MIN + (trimParam - (VALUE_RANGE_MIN + round(VALUE_RANGE_ABS/2)))*2;
+        }
+        else if(trimParam < (VALUE_RANGE_MIN + round(VALUE_RANGE_ABS/2))){
+            offsetToZero = VALUE_RANGE_MIN - ((VALUE_RANGE_MIN + round(VALUE_RANGE_ABS/2)) - trimParam)*2;
+        }
+        retVal = (uint16_t)(readVal * round((VALUE_RANGE_MAX - trimParam)/round(JOYSTICK_STEP_WIDTH/2)) + offsetToZero);
+    }
+    else if(readVal < round(JOYSTICK_STEP_WIDTH/2 - JOYSTICK_DEAD_STEPS)){
+        retVal = (uint16_t)(readVal * round((trimParam - VALUE_RANGE_MIN)/round(JOYSTICK_STEP_WIDTH/2)) + VALUE_RANGE_MIN);
+    }
+    else{
+        retVal = trimParam;
+    }
+
+    if(retVal > VALUE_RANGE_MAX){retVal = VALUE_RANGE_MAX;}
+    if(retVal < VALUE_RANGE_MIN){retVal = VALUE_RANGE_MIN;}
+
+    return retVal;
+}
+
+uint16_t calculateOutputValueForAccelerator(uint32_t readVal){
+    uint16_t retVal = 1500;
+
+    if(readVal < (ACCELERATOR_IDLE_POS_MEASURED - round(ACCELERATOR_STEP_WIDTH_MEASURED/2))){
+        readVal = 0;
+    }
+    else {
+        readVal = readVal - (ACCELERATOR_IDLE_POS_MEASURED - round(ACCELERATOR_STEP_WIDTH_MEASURED/2));
+    }
+
+    if(readVal < (ACCELERATOR_IDLE_POS_MEASURED - ACCELERATOR_DEAD_STEPS) || readVal > (ACCELERATOR_IDLE_POS_MEASURED + ACCELERATOR_DEAD_STEPS)){
+        retVal = (uint16_t)((readVal * round(VALUE_RANGE_MIN/ACCELERATOR_STEP_WIDTH_MEASURED)) + VALUE_RANGE_MIN);
+    }
+
+    if(retVal > VALUE_RANGE_MAX){retVal = VALUE_RANGE_MAX;}
+    if(retVal < VALUE_RANGE_MIN){retVal = VALUE_RANGE_MIN;}
+
+    return retVal;
+}
+
+void controlPoller(UArg *mailboxObject)
 {
 #ifndef DEACTIVATE_CONTROLLER
     // TODO: Please check for correctness
-//    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
+    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     Copter_Params copterParams;
-    int32_t usrButton1 = 0;
-    int32_t usrButton2 = 0;
-    int32_t bordButton1 = 0;
-    int32_t bordButton2 = 0;
-    int32_t armButton = 0;
-    uint32_t analogInputs[5] = {0};
+    Copter_Params dumpDummy;
+    Trim_Params copterTrim;
+    int32_t buttonValues[NUM_OF_BUTTONS] = {0};
+    uint32_t analogInputs[NUM_OF_ADC_IN] = {0};
     uint32_t adcStepWidth = 1;
     uint16_t statusLedCounter = 0;
     uint8_t analogPins[] = {ADC_CTL_CH3, ADC_CTL_CH2, ADC_CTL_CH1, ADC_CTL_CH9, ADC_CTL_CH0};
     bool statusLedStatus = false;
     uint8_t i = 0;
 
-    // TODO: static ist hier jetzt nicht mehr notwendig, ist ja jetzt ein task
-    static int32_t oldButtonValues[5] = {0};
-    static int32_t validButtonValues[5] = {0};
-    static uint32_t validADCValues[5] = {0};
+    int32_t oldButtonValues[NUM_OF_BUTTONS] = {0};
+    int32_t validButtonValues[NUM_OF_BUTTONS] = {0};
+    uint32_t validADCValues[NUM_OF_ADC_IN] = {0};
 
-    copterParams.roll = 10;
+    //init copter params
+    copterParams.yaw = 1500;
+    copterParams.throttle = 0;
+    copterParams.pitch = 1500;
+    copterParams.roll = 1500;
+    copterParams.arm = 0;
 
-    //Mailbox_post(mailbox, &copterParams, BIOS_NO_WAIT); //does not work so far...
+    //init copter trim params
+    copterTrim.yaw = 1500;
+    copterTrim.throttle = 1400;
+    copterTrim.trimSteps = 1;
 
 #if PRINT_CTL_INPUT
     System_printf("Starting to poll controller input...\n");
     System_flush();
 #endif
 
-    copterParams.arm = false;
 #endif // DEACTIVATE_CONTROLLER
 
     while(1){
-        // TODO: lösch mich wenn du mich nicht mehr brauchst
-        System_printf("ControlTask\n");
-        System_flush();
 #ifndef DEACTIVATE_CONTROLLER
         //read inputs
         // TODO: use the RTOS function GPIO_read instead of the tiva function!!
-        usrButton1 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_1);
-        usrButton2 = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_2);
-        bordButton2 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_0);
-        bordButton1 = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_1);
-        armButton = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
-        for(i = 0; i < sizeof(analogPins); i++){
+        buttonValues[0] = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_1);
+        buttonValues[1] = GPIOPinRead(GPIO_PORTL_BASE, GPIO_PIN_2);
+        buttonValues[3] = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_0);
+        buttonValues[2] = GPIOPinRead(GPIO_PORTJ_BASE, GPIO_PIN_1);
+        buttonValues[4] = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
+        for(i = 0; i < NUM_OF_ADC_IN; i++){
             analogInputs[i] = getValueFromADC(analogPins[i]);
             if(i < ACCELERATOR_AXIS){adcStepWidth = ACCELERATOR_STEP_WIDTH;}
             else{adcStepWidth = JOYSTICK_STEP_WIDTH;}
             validADCValues[i] = (uint32_t)round(analogInputs[i]/round(ADC_RANGE/adcStepWidth));
         }
 
-        if(usrButton1 != oldButtonValues[0]){
-
+        //Debouncing buttons
+        for(i = 0; i < NUM_OF_BUTTONS; i++){
+            if(buttonValues[i] != oldButtonValues[i]){
+                oldButtonValues[i] = buttonValues[i];
+            }
+            if(buttonValues[i] != validButtonValues[i] && buttonValues[i] == oldButtonValues[i]){
+                validButtonValues[i] = buttonValues[i];
+                assignButtonState(&copterParams, &copterTrim, validButtonValues[i], i);
+            }
         }
+
+        copterParams.yaw = calculateOutputValueForJoystick(copterTrim.yaw, validADCValues[3]);
+        copterParams.throttle = calculateOutputValueForJoystick(copterTrim.throttle, validADCValues[4]);
+        copterParams.pitch = calculateOutputValueForAccelerator(validADCValues[1]);
+        copterParams.roll = calculateOutputValueForAccelerator(validADCValues[0]);
+
+        //pushing new data to mailbox if free
+        Mailbox_post(mailbox, &copterParams, BIOS_NO_WAIT);
+
 #if PRINT_CTL_INPUT
-        System_printf("Yaw trim: B1 = %d, B2 = %d, Throttle trim: B1 = %d, B2 = %d, Arm = %d\n", usrButton1, usrButton2, bordButton1, bordButton2, armButton);
+        System_printf("Yaw trim: B1 = %d, B2 = %d, Throttle trim: B1 = %d, B2 = %d, Arm = %d\n", buttonValues[0], buttonValues[1], buttonValues[2], buttonValues[3], buttonValues[4]);
         System_printf("Acceleration: X = %d, Y = %d, Z = %d, Joystick: X = %d, Y = %d\n", validADCValues[0], validADCValues[1], validADCValues[2], validADCValues[3], validADCValues[4]);
+        System_flush();
+#endif
+#if PRINT_CTL_OUTPUT
+        System_printf("Arm = %d, Yaw = %d, Throttle = %d, Pitch = %d, Roll = %d\n", copterParams.arm, copterParams.yaw, copterParams.throttle, copterParams.pitch, copterParams.roll);
         System_flush();
 #endif
         // handle status LED
