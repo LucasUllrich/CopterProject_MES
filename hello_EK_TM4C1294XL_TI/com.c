@@ -299,7 +299,7 @@ void comSender (UArg arg0, UArg arg1) //(UArg *mailboxObject, UArg arg1)
 //    uint16_t dummy;
 
     uart = _initUart();
-//    while(_initBTModule(uart));
+    while(_initBTModule(uart));
     GPIO_write(Board_LED0, PIN_HIGH);
 
 
