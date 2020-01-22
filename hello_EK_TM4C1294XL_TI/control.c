@@ -111,9 +111,9 @@ void controlPoller(UArg *mailboxObject)
 {
 #ifndef DEACTIVATE_CONTROLLER
     // TODO: Please check for correctness
-    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
+//    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     Copter_Params copterParams;
-    Copter_Params dumpDummy;
+//    Copter_Params dumpDummy;
     Trim_Params copterTrim;
     int32_t buttonValues[NUM_OF_BUTTONS] = {0};
     uint32_t analogInputs[NUM_OF_ADC_IN] = {0};

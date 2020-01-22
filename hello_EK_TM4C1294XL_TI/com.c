@@ -57,7 +57,7 @@ UART_Handle _initUart (void)
 uint8_t _initBTModule (UART_Handle uart)
 {
     GPIO_write(TESTPIN, PIN_LOW);
-    uint8_t counter;
+//    uint8_t counter;
     uint8_t buffer[UART_BUFFER_SIZE] = {0};
 
     GPIO_write(BT_RESET, PIN_LOW);
@@ -203,6 +203,70 @@ uint8_t _comUartSend (UART_Handle uart, uint8_t buffer[UART_BUFFER_SIZE], uint8_
     return 0;
 }
 
+void copterSend (UART_Handle uart, Copter_Params copterParams)
+{
+    uint8_t buffer[UART_BUFFER_SIZE];
+    uint8_t checksum;
+    uint8_t counter;
+    static uint8_t armState = 0;
+
+    buffer[0] = (uint8_t) 0x24;
+    buffer[1] = (uint8_t) 0x4D;
+    buffer[2] = (uint8_t) 0x3C;
+    buffer[3] = (uint8_t) 0x0A;
+    buffer[4] = (uint8_t) 0xC8;
+
+//    buffer[5] = (uint8_t) (copterParams.pitch & 0x00FF);
+//    buffer[6] = (uint8_t) ((copterParams.pitch >> 8) & 0x00FF);
+//    buffer[7] = (uint8_t) (copterParams.roll & 0x00FF);
+//    buffer[8] = (uint8_t) ((copterParams.roll >> 8) & 0x00FF);
+
+    buffer[5] = (uint8_t) (1500 & 0x00FF);
+    buffer[6] = (uint8_t) ((1500 >> 8) & 0x00FF);
+    buffer[7] = (uint8_t) (1500 & 0x00FF);
+    buffer[8] = (uint8_t) ((1500 >> 8) & 0x00FF);
+
+    buffer[9] = (uint8_t) (copterParams.throttle & 0x00FF);
+    buffer[10] = (uint8_t) ((copterParams.throttle >> 8) & 0x00FF);
+    buffer[11] = (uint8_t) (copterParams.yaw & 0x00FF);
+    buffer[12] = (uint8_t) ((copterParams.yaw >> 8) & 0x00FF);
+
+    if (copterParams.arm == 0x01) {
+        buffer[13] = (uint8_t) 0xd0;
+        buffer[14] = (uint8_t) 0x07;
+        System_printf("Armed\n");
+        // Send the first packet with minimal throttle
+        if (armState == 0)
+        {
+            System_printf("Reset throttle\n");
+            buffer[9] = (uint8_t) (1000 & 0x00FF);
+            buffer[10] = (uint8_t) ((1000 >> 8) & 0x00FF);
+        }
+        System_flush();
+    } else {
+        armState = 0;
+        buffer[9] = (uint8_t) (1000 & 0x00FF);
+        buffer[10] = (uint8_t) ((1000 >> 8) & 0x00FF);
+
+        buffer[13] = (uint8_t) 0xe8;
+        buffer[14] = (uint8_t) 0x03;
+    }
+
+    checksum = 0;
+
+    for (counter = 3; counter < PACKET_SIZE - 1; counter++)
+        checksum ^= buffer[counter];
+
+    buffer[15] = checksum;
+
+
+    _comUartSend (uart, buffer, PACKET_SIZE);
+    if (copterParams.arm == 0x01)
+    {
+        armState = 1;
+    }
+}
+
 /**
  * Try to read a UART response for 200 ms, use the short timeout to
  * achieve a fast response if something is read
@@ -227,23 +291,24 @@ uint8_t comUartReceive (UART_Handle uart, void *buf, size_t count)
     return retval;
 }
 
-void comSender (UArg *mailboxObject, UArg arg1)
+void comSender (UArg arg0, UArg arg1) //(UArg *mailboxObject, UArg arg1)
 {
-    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
+//    Mailbox_Handle mailbox = (Mailbox_Handle) &mailboxObject;
     UART_Handle uart;
     Copter_Params copterParams;
 //    uint16_t dummy;
 
     uart = _initUart();
-    while(_initBTModule(uart));
+//    while(_initBTModule(uart));
     GPIO_write(Board_LED0, PIN_HIGH);
 
 
     while (1)
     {
         Mailbox_pend(mailbox, &copterParams, BIOS_NO_WAIT);
-        System_printf("roll: %d, pitch: %d, yaw: %d, throttle: %d, arm: %d\n", copterParams.roll, copterParams.pitch, copterParams.yaw, copterParams.throttle, copterParams.arm);
-        System_flush();
+//        System_printf("roll: %d, pitch: %d, yaw: %d, throttle: %d, arm: %d\n", copterParams.roll, copterParams.pitch, copterParams.yaw, copterParams.throttle, copterParams.arm);
+//        System_flush();
+        copterSend(uart, copterParams);
         Task_sleep (20);
     }
 }

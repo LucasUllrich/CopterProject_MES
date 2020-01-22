@@ -46,5 +46,7 @@ typedef struct Copter_Params {
     uint8_t arm;
 } Copter_Params;
 
+Mailbox_Handle mailbox;
+
 
 #endif /* MAIN_H_ */

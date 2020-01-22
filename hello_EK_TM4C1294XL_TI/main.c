@@ -56,7 +56,8 @@ void _initMailboxes (Mailbox_Handle *uartMailbox)
     Error_Block eb;
     Error_init(&eb);
 
-    *uartMailbox = Mailbox_create(sizeof(Copter_Params), 1, NULL, &eb);
+    //*uartMailbox
+    mailbox = Mailbox_create(sizeof(Copter_Params), 1, NULL, &eb);
     if (Error_check(&eb))
     {
         // Stop system
@@ -105,9 +106,10 @@ Int main()
     Task_Params controlParams;
     Task_Params_init(&controlParams);
 
-    controlParams.arg0 = (UArg) (&uartMailbox);
+//    controlParams.arg0 = (UArg) (&uartMailbox);
     controlParams.arg1 = 0;
     controlParams.priority = 8;
+    controlParams.stackSize = 1024;
 
     controlTask = Task_create((Task_FuncPtr)controlPoller, &controlParams, &eb);
     if (controlTask == NULL)
@@ -120,7 +122,7 @@ Int main()
     Task_Params comParams;
     Task_Params_init(&comParams);
 
-    comParams.arg0 = (UArg) (&uartMailbox);
+//    comParams.arg0 = (UArg) (&uartMailbox);
 //    comParams.arg1 = (UArg) (&uart);
     comParams.priority = 12;
     comParams.stackSize = 1024;
